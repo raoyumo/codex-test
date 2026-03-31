@@ -26,3 +26,19 @@ p {
   font-size: 16px;
   cursor: pointer;
 }
+
+.edit-intro {
+  margin-top: 20px;
+}
+
+#intro-input {
+  padding: 8px;
+  width: 260px;
+  max-width: 90%;
+}
+
+#update-intro-btn {
+  margin-left: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}

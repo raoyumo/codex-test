@@ -1,6 +1,13 @@
 const title = document.getElementById('page-title');
-const button = document.getElementById('change-title-btn');
+const changeTitleButton = document.getElementById('change-title-btn');
+const introText = document.getElementById('intro-text');
+const introInput = document.getElementById('intro-input');
+const updateIntroButton = document.getElementById('update-intro-btn');
 
-button.addEventListener('click', () => {
+changeTitleButton.addEventListener('click', () => {
   title.textContent = '我成功用上 Codex 了';
+});
+
+updateIntroButton.addEventListener('click', () => {
+  introText.textContent = introInput.value;
 });
