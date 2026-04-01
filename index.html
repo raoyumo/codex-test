@@ -1,33 +1,48 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>初学者计算器</title>
+    <title>Yumo Calculator</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="container">
-      <h1>简单计算器</h1>
-      <p>输入两个数字，然后点击下面的按钮进行计算。</p>
+    <main class="page">
+      <header class="intro">
+        <div class="title-row">
+          <h1>Yumo Calculator</h1>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙 Dark</button>
+        </div>
+        <p>My first Codex project</p>
+      </header>
 
-      <div class="inputs">
-        <label for="number-a">数字 1：</label>
-        <input id="number-a" type="text" placeholder="例如：10" />
+      <section class="calculator" aria-label="Calculator">
+        <div id="display" class="display">0</div>
 
-        <label for="number-b">数字 2：</label>
-        <input id="number-b" type="text" placeholder="例如：5" />
-      </div>
+        <div class="buttons">
+          <button class="btn btn-clear" data-value="C">C</button>
+          <button class="btn btn-backspace" data-value="backspace">⌫</button>
+          <button class="btn" data-value="/">/</button>
+          <button class="btn" data-value="*">*</button>
+          <button class="btn" data-value="-">-</button>
 
-      <div class="buttons">
-        <button id="add-btn">加法</button>
-        <button id="subtract-btn">减法</button>
-        <button id="multiply-btn">乘法</button>
-        <button id="divide-btn">除法</button>
-        <button id="clear-btn">清空</button>
-      </div>
+          <button class="btn" data-value="7">7</button>
+          <button class="btn" data-value="8">8</button>
+          <button class="btn" data-value="9">9</button>
+          <button class="btn" data-value="+">+</button>
 
-      <p id="message" class="message">结果：请先输入数字。</p>
+          <button class="btn" data-value="4">4</button>
+          <button class="btn" data-value="5">5</button>
+          <button class="btn" data-value="6">6</button>
+          <button class="btn btn-equals" data-value="=">=</button>
+
+          <button class="btn" data-value="1">1</button>
+          <button class="btn" data-value="2">2</button>
+          <button class="btn" data-value="3">3</button>
+          <button class="btn btn-zero" data-value="0">0</button>
+          <button class="btn" data-value=".">.</button>
+        </div>
+      </section>
     </main>
 
     <script src="script.js"></script>
