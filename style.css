@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fb;
+  color: #222;
+}
+
+.container {
+  max-width: 720px;
+  margin: 80px auto;
+  padding: 0 16px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 12px;
+}
+
+p {
+  line-height: 1.6;
+}
+
+.calculator {
+  margin-top: 24px;
+}
+
+.calculator input {
+  padding: 8px;
+  width: 180px;
+  max-width: 90%;
+  margin: 6px;
+}
+
+.buttons {
+  margin-top: 12px;
+}
+
+.buttons button {
+  padding: 8px 12px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+#result {
+  margin-top: 16px;
+  font-weight: bold;
+}
