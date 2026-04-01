@@ -3,20 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>我的第一个 Codex 网页</title>
+    <title>初学者计算器</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="container">
-      <h1 id="page-title">我的第一个 Codex 网页</h1>
-      <p id="intro-text">这是一个非常简单的网页练习项目，用来学习 HTML、CSS 和 JavaScript。</p>
+      <h1>简单计算器</h1>
+      <p>输入两个数字，然后点击按钮进行计算。</p>
 
-      <button id="change-title-btn">点我</button>
+      <div class="inputs">
+        <label for="number-a">数字 1：</label>
+        <input id="number-a" type="text" placeholder="例如：10" />
 
-      <div class="edit-intro">
-        <input id="intro-input" type="text" placeholder="在这里输入新的介绍文字" />
-        <button id="update-intro-btn">更新介绍</button>
+        <label for="number-b">数字 2：</label>
+        <input id="number-b" type="text" placeholder="例如：5" />
       </div>
+
+      <div class="buttons">
+        <button id="add-btn">加法</button>
+        <button id="subtract-btn">减法</button>
+        <button id="multiply-btn">乘法</button>
+        <button id="divide-btn">除法</button>
+        <button id="clear-btn">清空</button>
+      </div>
+
+      <p id="message" class="message">结果：请先输入数字。</p>
     </main>
 
     <script src="script.js"></script>
