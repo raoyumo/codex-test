@@ -1,6 +1,28 @@
 const display = document.getElementById('display');
 const buttons = document.querySelectorAll('.btn');
 
+const themeToggleButton = document.getElementById('theme-toggle');
+
+// Theme toggle logic:
+// We switch a CSS class on <body> and update button text so beginners
+// can clearly see which mode is active.
+function updateThemeToggleLabel() {
+  if (document.body.classList.contains('dark-theme')) {
+    themeToggleButton.textContent = '☀️ Light';
+  } else {
+    themeToggleButton.textContent = '🌙 Dark';
+  }
+}
+
+// When user clicks the theme button, instantly switch page colors.
+themeToggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('dark-theme');
+  updateThemeToggleLabel();
+});
+
+// Set the correct label when the page first loads.
+updateThemeToggleLabel();
+
 // These variables store the current number, previous number, and chosen operator.
 let currentInput = '0';
 let firstNumber = null;

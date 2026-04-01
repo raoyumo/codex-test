@@ -1,3 +1,53 @@
+:root {
+  --bg-start: #eef2ff;
+  --bg-end: #f8fbff;
+  --text-main: #1f2937;
+  --title-color: #1e3a8a;
+  --subtitle-color: #4b5563;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --card-shadow: rgba(30, 58, 138, 0.14);
+  --display-start: #1f2937;
+  --display-end: #111827;
+  --display-text: #f9fafb;
+  --btn-bg: #f3f4f6;
+  --btn-text: #111827;
+  --btn-hover: #e5e7eb;
+  --clear-bg: #fee2e2;
+  --clear-text: #991b1b;
+  --backspace-bg: #e0e7ff;
+  --backspace-text: #1e3a8a;
+  --equals-bg: #2563eb;
+  --equals-text: #ffffff;
+  --toggle-bg: #eef2ff;
+  --toggle-text: #1e3a8a;
+}
+
+body.dark-theme {
+  --bg-start: #0b1220;
+  --bg-end: #141c2f;
+  --text-main: #e5e7eb;
+  --title-color: #c7d2fe;
+  --subtitle-color: #cbd5e1;
+  --card-bg: #111827;
+  --card-border: #374151;
+  --card-shadow: rgba(2, 6, 23, 0.45);
+  --display-start: #0f172a;
+  --display-end: #020617;
+  --display-text: #f8fafc;
+  --btn-bg: #1f2937;
+  --btn-text: #f3f4f6;
+  --btn-hover: #374151;
+  --clear-bg: #7f1d1d;
+  --clear-text: #fecaca;
+  --backspace-bg: #312e81;
+  --backspace-text: #c7d2fe;
+  --equals-bg: #3b82f6;
+  --equals-text: #eff6ff;
+  --toggle-bg: #1f2937;
+  --toggle-text: #c7d2fe;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,8 +58,9 @@ body {
   display: grid;
   place-items: center;
   font-family: Arial, sans-serif;
-  background: linear-gradient(160deg, #eef2ff, #f8fbff);
-  color: #1f2937;
+  background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+  color: var(--text-main);
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 .page {
@@ -21,25 +72,42 @@ body {
   margin-bottom: 12px;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .intro h1 {
   margin: 0;
   font-size: 1.8rem;
-  color: #1e3a8a;
+  color: var(--title-color);
 }
 
 .intro p {
   margin: 6px 0 0;
   font-size: 0.95rem;
-  color: #4b5563;
+  color: var(--subtitle-color);
+}
+
+.theme-toggle {
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background-color: var(--toggle-bg);
+  color: var(--toggle-text);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
 
 .calculator {
   width: 100%;
   padding: 18px;
   border-radius: 18px;
-  background-color: #ffffff;
-  box-shadow: 0 18px 40px rgba(30, 58, 138, 0.14);
-  border: 1px solid #e5e7eb;
+  background-color: var(--card-bg);
+  box-shadow: 0 18px 40px var(--card-shadow);
+  border: 1px solid var(--card-border);
 }
 
 .display {
@@ -48,8 +116,8 @@ body {
   margin-bottom: 14px;
   padding: 12px;
   border-radius: 12px;
-  background: linear-gradient(180deg, #1f2937, #111827);
-  color: #f9fafb;
+  background: linear-gradient(180deg, var(--display-start), var(--display-end));
+  color: var(--display-text);
   font-size: 2rem;
   text-align: right;
   overflow: hidden;
@@ -67,14 +135,14 @@ body {
   padding: 14px;
   font-size: 1.1rem;
   font-weight: 600;
-  background-color: #f3f4f6;
-  color: #111827;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
   cursor: pointer;
   transition: transform 0.08s ease, background-color 0.2s ease;
 }
 
 .btn:hover {
-  background-color: #e5e7eb;
+  background-color: var(--btn-hover);
 }
 
 .btn:active {
@@ -82,25 +150,24 @@ body {
 }
 
 .btn-clear {
-  background-color: #fee2e2;
-  color: #991b1b;
+  background-color: var(--clear-bg);
+  color: var(--clear-text);
 }
 
 .btn-backspace {
-  background-color: #e0e7ff;
-  color: #1e3a8a;
+  background-color: var(--backspace-bg);
+  color: var(--backspace-text);
 }
 
 .btn-equals {
-  background-color: #2563eb;
-  color: #ffffff;
+  background-color: var(--equals-bg);
+  color: var(--equals-text);
   grid-row: span 2;
 }
 
 .btn-zero {
   grid-column: span 2;
 }
-
 
 /* Class used by JavaScript to briefly show a pressed button effect. */
 .btn.is-pressed {
