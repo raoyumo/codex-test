@@ -113,8 +113,8 @@ function handleEquals() {
   updateDisplay();
 }
 
-// This function routes all input values (from buttons or keyboard)
-// to the correct calculator action.
+// Route all input values (from mouse clicks or keyboard keys)
+// into the same calculator behavior.
 function processInput(value) {
   if (value === 'C') {
     clearCalculator();
@@ -129,6 +129,34 @@ function processInput(value) {
   }
 }
 
+// Convert keyboard keys to calculator actions.
+// Returning null means "ignore this key".
+function mapKeyboardKeyToInput(key, code) {
+  // 0-9 should enter numbers.
+  if (/^[0-9]$/.test(key)) return key;
+
+  // Support main keyboard and numpad operators.
+  if (['+', '-', '*', '/'].includes(key)) return key;
+  if (code === 'NumpadAdd') return '+';
+  if (code === 'NumpadSubtract') return '-';
+  if (code === 'NumpadMultiply') return '*';
+  if (code === 'NumpadDivide') return '/';
+
+  // Decimal point from keyboard or numpad.
+  if (key === '.' || code === 'NumpadDecimal') return '.';
+
+  // Enter should behave like equals.
+  if (key === 'Enter' || code === 'NumpadEnter') return '=';
+
+  // Backspace should delete one character.
+  if (key === 'Backspace') return 'backspace';
+
+  // Escape should clear everything.
+  if (key === 'Escape') return 'C';
+
+  return null;
+}
+
 // Listen to calculator buttons and process each button value.
 buttons.forEach((button) => {
   button.addEventListener('click', () => {
@@ -136,44 +164,21 @@ buttons.forEach((button) => {
   });
 });
 
-// Keyboard support:
-// - 0-9 enters numbers
-// - + - * / enters operators
-// - . enters decimal point
-// - Enter acts like equals
-// - Backspace deletes one character
-// - Escape clears the calculator
-window.addEventListener('keydown', (event) => {
-  const { key } = event;
+// Keyboard support for the webpage.
+// This works without extra setup: when the page is focused, key presses
+// are translated into calculator actions via mapKeyboardKeyToInput().
+document.addEventListener('keydown', (event) => {
+  const mappedInput = mapKeyboardKeyToInput(event.key, event.code);
 
-  // Allow number keys 0-9.
-  if (/^[0-9]$/.test(key)) {
-    processInput(key);
+  // Ignore keys that are not part of calculator controls.
+  if (!mappedInput) {
     return;
   }
 
-  // Allow operator and decimal keys.
-  if (['+', '-', '*', '/', '.'].includes(key)) {
-    processInput(key);
-    return;
-  }
+  // Prevent default browser behavior for handled keys
+  // (for example: Backspace navigating browser history).
+  event.preventDefault();
 
-  // Enter should behave like the equals button.
-  if (key === 'Enter') {
-    event.preventDefault();
-    processInput('=');
-    return;
-  }
-
-  // Backspace should delete the last input character.
-  if (key === 'Backspace') {
-    event.preventDefault();
-    processInput('backspace');
-    return;
-  }
-
-  // Escape should clear the calculator.
-  if (key === 'Escape') {
-    processInput('C');
-  }
+  // Run the same logic as clicking a calculator button.
+  processInput(mappedInput);
 });
