@@ -30,14 +30,28 @@ function calculate(a, b, selectedOperator) {
   return b;
 }
 
-// Handle number button clicks (0-9).
-function handleNumber(value) {
+// Handle number and decimal button clicks.
+function handleNumberInput(value) {
+  // If we are starting a fresh number after an operator, begin with this value.
   if (shouldStartNewNumber) {
-    currentInput = value;
+    currentInput = value === '.' ? '0.' : value;
     shouldStartNewNumber = false;
-  } else {
-    currentInput = currentInput === '0' ? value : currentInput + value;
+    updateDisplay();
+    return;
   }
+
+  // Only allow one decimal point in a number (prevents 1.2.3).
+  if (value === '.') {
+    if (currentInput.includes('.')) {
+      return;
+    }
+    currentInput += '.';
+    updateDisplay();
+    return;
+  }
+
+  // Regular number input behavior.
+  currentInput = currentInput === '0' ? value : currentInput + value;
   updateDisplay();
 }
 
@@ -84,7 +98,7 @@ buttons.forEach((button) => {
     } else if (['+', '-', '*', '/'].includes(value)) {
       handleOperator(value);
     } else {
-      handleNumber(value);
+      handleNumberInput(value);
     }
   });
 });
