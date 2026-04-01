@@ -55,7 +55,6 @@ function handleNumberInput(value) {
   updateDisplay();
 }
 
-
 // Handle backspace button click to delete one character.
 function handleBackspace() {
   // If next input should start a new number, keep display at 0.
@@ -114,21 +113,67 @@ function handleEquals() {
   updateDisplay();
 }
 
-// Listen to every calculator button and run the matching logic.
+// This function routes all input values (from buttons or keyboard)
+// to the correct calculator action.
+function processInput(value) {
+  if (value === 'C') {
+    clearCalculator();
+  } else if (value === 'backspace') {
+    handleBackspace();
+  } else if (value === '=') {
+    handleEquals();
+  } else if (['+', '-', '*', '/'].includes(value)) {
+    handleOperator(value);
+  } else {
+    handleNumberInput(value);
+  }
+}
+
+// Listen to calculator buttons and process each button value.
 buttons.forEach((button) => {
   button.addEventListener('click', () => {
-    const value = button.dataset.value;
-
-    if (value === 'C') {
-      clearCalculator();
-    } else if (value === 'backspace') {
-      handleBackspace();
-    } else if (value === '=') {
-      handleEquals();
-    } else if (['+', '-', '*', '/'].includes(value)) {
-      handleOperator(value);
-    } else {
-      handleNumberInput(value);
-    }
+    processInput(button.dataset.value);
   });
+});
+
+// Keyboard support:
+// - 0-9 enters numbers
+// - + - * / enters operators
+// - . enters decimal point
+// - Enter acts like equals
+// - Backspace deletes one character
+// - Escape clears the calculator
+window.addEventListener('keydown', (event) => {
+  const { key } = event;
+
+  // Allow number keys 0-9.
+  if (/^[0-9]$/.test(key)) {
+    processInput(key);
+    return;
+  }
+
+  // Allow operator and decimal keys.
+  if (['+', '-', '*', '/', '.'].includes(key)) {
+    processInput(key);
+    return;
+  }
+
+  // Enter should behave like the equals button.
+  if (key === 'Enter') {
+    event.preventDefault();
+    processInput('=');
+    return;
+  }
+
+  // Backspace should delete the last input character.
+  if (key === 'Backspace') {
+    event.preventDefault();
+    processInput('backspace');
+    return;
+  }
+
+  // Escape should clear the calculator.
+  if (key === 'Escape') {
+    processInput('C');
+  }
 });
