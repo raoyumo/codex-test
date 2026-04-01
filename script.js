@@ -3,6 +3,12 @@ const buttons = document.querySelectorAll('.btn');
 
 const themeToggleButton = document.getElementById('theme-toggle');
 
+const historyList = document.getElementById('history-list');
+const clearHistoryButton = document.getElementById('clear-history');
+
+// Store the most recent calculation strings (up to 10 items).
+let calculationHistory = [];
+
 // Theme toggle logic:
 // We switch a CSS class on <body> and update button text so beginners
 // can clearly see which mode is active.
@@ -22,6 +28,43 @@ themeToggleButton.addEventListener('click', () => {
 
 // Set the correct label when the page first loads.
 updateThemeToggleLabel();
+renderHistory();
+
+
+// Render the history array to the history list in the page.
+function renderHistory() {
+  historyList.innerHTML = '';
+
+  if (calculationHistory.length === 0) {
+    historyList.innerHTML = '<li class="history-empty">No calculations yet.</li>';
+    return;
+  }
+
+  calculationHistory.forEach((entry) => {
+    const item = document.createElement('li');
+    item.textContent = entry;
+    historyList.appendChild(item);
+  });
+}
+
+// Save one completed calculation to history.
+function addToHistory(entry) {
+  // Add newest entry to the top.
+  calculationHistory.unshift(entry);
+
+  // Keep only the most recent 10 entries.
+  if (calculationHistory.length > 10) {
+    calculationHistory = calculationHistory.slice(0, 10);
+  }
+
+  renderHistory();
+}
+
+// Clear all saved history entries.
+clearHistoryButton.addEventListener('click', () => {
+  calculationHistory = [];
+  renderHistory();
+});
 
 // These variables store the current number, previous number, and chosen operator.
 let currentInput = '0';
@@ -126,7 +169,11 @@ function handleEquals() {
   if (operator === null || firstNumber === null) return;
 
   const secondNumber = Number(currentInput);
+  const expressionText = `${firstNumber} ${operator} ${secondNumber}`;
   const result = calculate(firstNumber, secondNumber, operator);
+
+  // Save each completed equation to history (example: 12 + 3 = 15).
+  addToHistory(`${expressionText} = ${result}`);
 
   currentInput = String(result);
   firstNumber = result === 'Error' ? null : result;
