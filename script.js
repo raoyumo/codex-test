@@ -157,9 +157,27 @@ function mapKeyboardKeyToInput(key, code) {
   return null;
 }
 
+// Add a short pressed animation class, then remove it.
+function animateButtonPress(button) {
+  if (!button) return;
+
+  button.classList.add('is-pressed');
+  setTimeout(() => {
+    button.classList.remove('is-pressed');
+  }, 120);
+}
+
+// Find and animate the button that matches a calculator input value.
+function animateMatchingButton(inputValue) {
+  const matchingButton = document.querySelector(`[data-value="${inputValue}"]`);
+  animateButtonPress(matchingButton);
+}
+
 // Listen to calculator buttons and process each button value.
 buttons.forEach((button) => {
   button.addEventListener('click', () => {
+    // Show the pressed animation for mouse clicks.
+    animateButtonPress(button);
     processInput(button.dataset.value);
   });
 });
@@ -178,6 +196,9 @@ document.addEventListener('keydown', (event) => {
   // Prevent default browser behavior for handled keys
   // (for example: Backspace navigating browser history).
   event.preventDefault();
+
+  // Highlight the matching button when keyboard input is used.
+  animateMatchingButton(mappedInput);
 
   // Run the same logic as clicking a calculator button.
   processInput(mappedInput);

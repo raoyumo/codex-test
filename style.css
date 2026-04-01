@@ -100,3 +100,10 @@ body {
 .btn-zero {
   grid-column: span 2;
 }
+
+
+/* Class used by JavaScript to briefly show a pressed button effect. */
+.btn.is-pressed {
+  transform: scale(0.96);
+  filter: brightness(0.95);
+}
