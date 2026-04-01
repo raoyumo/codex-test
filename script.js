@@ -1,13 +1,65 @@
-const title = document.getElementById('page-title');
-const changeTitleButton = document.getElementById('change-title-btn');
-const introText = document.getElementById('intro-text');
-const introInput = document.getElementById('intro-input');
-const updateIntroButton = document.getElementById('update-intro-btn');
+const numberAInput = document.getElementById('number-a');
+const numberBInput = document.getElementById('number-b');
+const message = document.getElementById('message');
 
-changeTitleButton.addEventListener('click', () => {
-  title.textContent = '我成功用上 Codex 了';
+const addButton = document.getElementById('add-btn');
+const subtractButton = document.getElementById('subtract-btn');
+const multiplyButton = document.getElementById('multiply-btn');
+const divideButton = document.getElementById('divide-btn');
+
+function getNumbers() {
+  const firstText = numberAInput.value.trim();
+  const secondText = numberBInput.value.trim();
+
+  if (firstText === '' || secondText === '') {
+    message.textContent = '提示：两个输入框都要填写。';
+    return null;
+  }
+
+  const firstNumber = Number(firstText);
+  const secondNumber = Number(secondText);
+
+  if (Number.isNaN(firstNumber) || Number.isNaN(secondNumber)) {
+    message.textContent = '提示：请输入有效的数字。';
+    return null;
+  }
+
+  return { firstNumber, secondNumber };
+}
+
+addButton.addEventListener('click', () => {
+  const numbers = getNumbers();
+  if (!numbers) return;
+
+  const result = numbers.firstNumber + numbers.secondNumber;
+  message.textContent = `结果：${result}`;
 });
 
-updateIntroButton.addEventListener('click', () => {
-  introText.textContent = introInput.value;
+subtractButton.addEventListener('click', () => {
+  const numbers = getNumbers();
+  if (!numbers) return;
+
+  const result = numbers.firstNumber - numbers.secondNumber;
+  message.textContent = `结果：${result}`;
+});
+
+multiplyButton.addEventListener('click', () => {
+  const numbers = getNumbers();
+  if (!numbers) return;
+
+  const result = numbers.firstNumber * numbers.secondNumber;
+  message.textContent = `结果：${result}`;
+});
+
+divideButton.addEventListener('click', () => {
+  const numbers = getNumbers();
+  if (!numbers) return;
+
+  if (numbers.secondNumber === 0) {
+    message.textContent = '提示：除数不能为 0。';
+    return;
+  }
+
+  const result = numbers.firstNumber / numbers.secondNumber;
+  message.textContent = `结果：${result}`;
 });
