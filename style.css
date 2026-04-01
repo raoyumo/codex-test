@@ -86,6 +86,11 @@ body {
   color: #991b1b;
 }
 
+.btn-backspace {
+  background-color: #e0e7ff;
+  color: #1e3a8a;
+}
+
 .btn-equals {
   background-color: #2563eb;
   color: #ffffff;

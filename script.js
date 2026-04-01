@@ -55,6 +55,34 @@ function handleNumberInput(value) {
   updateDisplay();
 }
 
+
+// Handle backspace button click to delete one character.
+function handleBackspace() {
+  // If next input should start a new number, keep display at 0.
+  if (shouldStartNewNumber) {
+    currentInput = '0';
+    shouldStartNewNumber = false;
+    updateDisplay();
+    return;
+  }
+
+  // After an Error, backspace should reset to 0.
+  if (currentInput === 'Error') {
+    currentInput = '0';
+    updateDisplay();
+    return;
+  }
+
+  // Remove the last character. If only one is left, show 0.
+  if (currentInput.length <= 1) {
+    currentInput = '0';
+  } else {
+    currentInput = currentInput.slice(0, -1);
+  }
+
+  updateDisplay();
+}
+
 // Handle operator button clicks (+, -, *, /).
 function handleOperator(value) {
   const inputNumber = Number(currentInput);
@@ -93,6 +121,8 @@ buttons.forEach((button) => {
 
     if (value === 'C') {
       clearCalculator();
+    } else if (value === 'backspace') {
+      handleBackspace();
     } else if (value === '=') {
       handleEquals();
     } else if (['+', '-', '*', '/'].includes(value)) {
