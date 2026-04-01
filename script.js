@@ -1,88 +1,90 @@
-const numberAInput = document.getElementById('number-a');
-const numberBInput = document.getElementById('number-b');
-const message = document.getElementById('message');
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('.btn');
 
-const addButton = document.getElementById('add-btn');
-const subtractButton = document.getElementById('subtract-btn');
-const multiplyButton = document.getElementById('multiply-btn');
-const divideButton = document.getElementById('divide-btn');
-const clearButton = document.getElementById('clear-btn');
+// These variables store the current number, previous number, and chosen operator.
+let currentInput = '0';
+let firstNumber = null;
+let operator = null;
+let shouldStartNewNumber = false;
 
-function getNumbers() {
-  const firstText = numberAInput.value.trim();
-  const secondText = numberBInput.value.trim();
-
-  if (firstText === '' || secondText === '') {
-    message.textContent = '提示：两个输入框都要填写。';
-    return null;
-  }
-
-  const firstNumber = Number(firstText);
-  const secondNumber = Number(secondText);
-
-  if (Number.isNaN(firstNumber) || Number.isNaN(secondNumber)) {
-    message.textContent = '提示：请输入有效的数字。';
-    return null;
-  }
-
-  return { firstNumber, secondNumber };
+// Update what is shown in the display area.
+function updateDisplay() {
+  display.textContent = currentInput;
 }
 
-function showAdditionResult() {
-  const numbers = getNumbers();
-  if (!numbers) {
-    return;
-  }
-
-  const result = numbers.firstNumber + numbers.secondNumber;
-  message.textContent = `结果：${result}`;
+// Reset everything back to the starting state.
+function clearCalculator() {
+  currentInput = '0';
+  firstNumber = null;
+  operator = null;
+  shouldStartNewNumber = false;
+  updateDisplay();
 }
 
-addButton.addEventListener('click', showAdditionResult);
+// Run a math operation using two numbers and an operator symbol.
+function calculate(a, b, selectedOperator) {
+  if (selectedOperator === '+') return a + b;
+  if (selectedOperator === '-') return a - b;
+  if (selectedOperator === '*') return a * b;
+  if (selectedOperator === '/') return b === 0 ? 'Error' : a / b;
+  return b;
+}
 
-subtractButton.addEventListener('click', () => {
-  const numbers = getNumbers();
-  if (!numbers) return;
+// Handle number button clicks (0-9).
+function handleNumber(value) {
+  if (shouldStartNewNumber) {
+    currentInput = value;
+    shouldStartNewNumber = false;
+  } else {
+    currentInput = currentInput === '0' ? value : currentInput + value;
+  }
+  updateDisplay();
+}
 
-  const result = numbers.firstNumber - numbers.secondNumber;
-  message.textContent = `结果：${result}`;
-});
+// Handle operator button clicks (+, -, *, /).
+function handleOperator(value) {
+  const inputNumber = Number(currentInput);
 
-multiplyButton.addEventListener('click', () => {
-  const numbers = getNumbers();
-  if (!numbers) return;
-
-  const result = numbers.firstNumber * numbers.secondNumber;
-  message.textContent = `结果：${result}`;
-});
-
-divideButton.addEventListener('click', () => {
-  const numbers = getNumbers();
-  if (!numbers) return;
-
-  if (numbers.secondNumber === 0) {
-    message.textContent = '提示：除数不能为 0。';
-    return;
+  if (firstNumber === null) {
+    firstNumber = inputNumber;
+  } else if (operator !== null) {
+    const result = calculate(firstNumber, inputNumber, operator);
+    currentInput = String(result);
+    firstNumber = result === 'Error' ? null : result;
+    updateDisplay();
   }
 
-  const result = numbers.firstNumber / numbers.secondNumber;
-  message.textContent = `结果：${result}`;
-});
+  operator = value;
+  shouldStartNewNumber = true;
+}
 
-clearButton.addEventListener('click', () => {
-  numberAInput.value = '';
-  numberBInput.value = '';
-  message.textContent = '结果：请先输入数字。';
-});
+// Handle equals button click (=) to finish the calculation.
+function handleEquals() {
+  if (operator === null || firstNumber === null) return;
 
-numberAInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    showAdditionResult();
-  }
-});
+  const secondNumber = Number(currentInput);
+  const result = calculate(firstNumber, secondNumber, operator);
 
-numberBInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    showAdditionResult();
-  }
+  currentInput = String(result);
+  firstNumber = result === 'Error' ? null : result;
+  operator = null;
+  shouldStartNewNumber = true;
+  updateDisplay();
+}
+
+// Listen to every calculator button and run the matching logic.
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const value = button.dataset.value;
+
+    if (value === 'C') {
+      clearCalculator();
+    } else if (value === '=') {
+      handleEquals();
+    } else if (['+', '-', '*', '/'].includes(value)) {
+      handleOperator(value);
+    } else {
+      handleNumber(value);
+    }
+  });
 });
