@@ -9,6 +9,10 @@ const clearHistoryButton = document.getElementById('clear-history');
 // Store the most recent calculation strings (up to 10 items).
 let calculationHistory = [];
 
+// Keys used to store data in the browser's localStorage.
+const THEME_STORAGE_KEY = 'yumo_calculator_theme';
+const HISTORY_STORAGE_KEY = 'yumo_calculator_history';
+
 // Theme toggle logic:
 // We switch a CSS class on <body> and update button text so beginners
 // can clearly see which mode is active.
@@ -20,15 +24,30 @@ function updateThemeToggleLabel() {
   }
 }
 
+// Save the currently selected theme in localStorage.
+function saveThemeToStorage() {
+  const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+  localStorage.setItem(THEME_STORAGE_KEY, currentTheme);
+}
+
+// Restore the saved theme from localStorage when page loads.
+function loadThemeFromStorage() {
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+  }
+
+  updateThemeToggleLabel();
+}
+
 // When user clicks the theme button, instantly switch page colors.
 themeToggleButton.addEventListener('click', () => {
   document.body.classList.toggle('dark-theme');
   updateThemeToggleLabel();
+  saveThemeToStorage();
 });
-
-// Set the correct label when the page first loads.
-updateThemeToggleLabel();
-renderHistory();
 
 
 // Render the history array to the history list in the page.
@@ -47,6 +66,30 @@ function renderHistory() {
   });
 }
 
+// Save history array to localStorage.
+function saveHistoryToStorage() {
+  localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(calculationHistory));
+}
+
+// Load history array from localStorage.
+function loadHistoryFromStorage() {
+  const savedHistoryText = localStorage.getItem(HISTORY_STORAGE_KEY);
+  if (!savedHistoryText) return;
+
+  let parsedHistory = [];
+  try {
+    parsedHistory = JSON.parse(savedHistoryText);
+  } catch {
+    // If saved data is invalid, fall back to an empty history.
+    parsedHistory = [];
+  }
+
+  // Only accept arrays, and keep at most 10 recent entries.
+  if (Array.isArray(parsedHistory)) {
+    calculationHistory = parsedHistory.slice(0, 10);
+  }
+}
+
 // Save one completed calculation to history.
 function addToHistory(entry) {
   // Add newest entry to the top.
@@ -58,13 +101,20 @@ function addToHistory(entry) {
   }
 
   renderHistory();
+  saveHistoryToStorage();
 }
 
 // Clear all saved history entries.
 clearHistoryButton.addEventListener('click', () => {
   calculationHistory = [];
   renderHistory();
+  saveHistoryToStorage();
 });
+
+// Restore saved theme and history when the page first loads.
+loadThemeFromStorage();
+loadHistoryFromStorage();
+renderHistory();
 
 // These variables store the current number, previous number, and chosen operator.
 let currentInput = '0';
