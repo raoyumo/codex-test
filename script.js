@@ -13,10 +13,18 @@ let calculationHistory = [];
 const THEME_STORAGE_KEY = 'yumo_calculator_theme';
 const HISTORY_STORAGE_KEY = 'yumo_calculator_history';
 
+// These variables store the current number, previous number, and chosen operator.
+let currentInput = '0';
+let firstNumber = null;
+let operator = null;
+let shouldStartNewNumber = false;
+
 // Theme toggle logic:
 // We switch a CSS class on <body> and update button text so beginners
 // can clearly see which mode is active.
 function updateThemeToggleLabel() {
+  if (!themeToggleButton) return;
+
   if (document.body.classList.contains('dark-theme')) {
     themeToggleButton.textContent = '☀️ Light';
   } else {
@@ -33,6 +41,7 @@ function saveThemeToStorage() {
 // Restore the saved theme from localStorage when page loads.
 function loadThemeFromStorage() {
   const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
   if (savedTheme === 'dark') {
     document.body.classList.add('dark-theme');
   } else {
@@ -43,15 +52,18 @@ function loadThemeFromStorage() {
 }
 
 // When user clicks the theme button, instantly switch page colors.
-themeToggleButton.addEventListener('click', () => {
-  document.body.classList.toggle('dark-theme');
-  updateThemeToggleLabel();
-  saveThemeToStorage();
-});
-
+if (themeToggleButton) {
+  themeToggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    updateThemeToggleLabel();
+    saveThemeToStorage();
+  });
+}
 
 // Render the history array to the history list in the page.
 function renderHistory() {
+  if (!historyList) return;
+
   historyList.innerHTML = '';
 
   if (calculationHistory.length === 0) {
@@ -77,6 +89,7 @@ function loadHistoryFromStorage() {
   if (!savedHistoryText) return;
 
   let parsedHistory = [];
+
   try {
     parsedHistory = JSON.parse(savedHistoryText);
   } catch {
@@ -105,25 +118,17 @@ function addToHistory(entry) {
 }
 
 // Clear all saved history entries.
-clearHistoryButton.addEventListener('click', () => {
-  calculationHistory = [];
-  renderHistory();
-  saveHistoryToStorage();
-});
-
-// Restore saved theme and history when the page first loads.
-loadThemeFromStorage();
-loadHistoryFromStorage();
-renderHistory();
-
-// These variables store the current number, previous number, and chosen operator.
-let currentInput = '0';
-let firstNumber = null;
-let operator = null;
-let shouldStartNewNumber = false;
+if (clearHistoryButton) {
+  clearHistoryButton.addEventListener('click', () => {
+    calculationHistory = [];
+    renderHistory();
+    saveHistoryToStorage();
+  });
+}
 
 // Update what is shown in the display area.
 function updateDisplay() {
+  if (!display) return;
   display.textContent = currentInput;
 }
 
@@ -160,6 +165,7 @@ function handleNumberInput(value) {
     if (currentInput.includes('.')) {
       return;
     }
+
     currentInput += '.';
     updateDisplay();
     return;
@@ -221,6 +227,8 @@ function handlePercent() {
 
 // Handle operator button clicks (+, -, *, /).
 function handleOperator(value) {
+  if (currentInput === 'Error') return;
+
   const inputNumber = Number(currentInput);
 
   if (firstNumber === null) {
@@ -238,7 +246,7 @@ function handleOperator(value) {
 
 // Handle equals button click (=) to finish the calculation.
 function handleEquals() {
-  if (operator === null || firstNumber === null) return;
+  if (operator === null || firstNumber === null || currentInput === 'Error') return;
 
   const secondNumber = Number(currentInput);
   const expressionText = `${firstNumber} ${operator} ${secondNumber}`;
@@ -293,11 +301,11 @@ function mapKeyboardKeyToInput(key, code) {
   // Percentage key.
   if (key === '%') return 'percent';
 
-  // Enter should behave like equals.
-  if (key === 'Enter' || code === 'NumpadEnter') return '=';
-
   // F9 toggles positive/negative (similar to many desktop calculators).
   if (key === 'F9') return 'plus-minus';
+
+  // Enter should behave like equals.
+  if (key === 'Enter' || code === 'NumpadEnter') return '=';
 
   // Backspace should delete one character.
   if (key === 'Backspace') return 'backspace';
@@ -354,3 +362,9 @@ document.addEventListener('keydown', (event) => {
   // Run the same logic as clicking a calculator button.
   processInput(mappedInput);
 });
+
+// Restore saved theme and history when the page first loads.
+loadThemeFromStorage();
+loadHistoryFromStorage();
+renderHistory();
+updateDisplay();
