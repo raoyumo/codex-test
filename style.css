@@ -26,7 +26,6 @@
   --history-text: #374151;
 }
 
-
 body.dark-theme {
   --bg-start: #0b1220;
   --bg-end: #141c2f;
@@ -55,7 +54,6 @@ body.dark-theme {
   --history-text: #e5e7eb;
 }
 
-
 * {
   box-sizing: border-box;
 }
@@ -72,7 +70,7 @@ body {
 }
 
 .page {
-  width: min(92vw, 360px);
+  width: min(94vw, 420px);
   text-align: center;
 }
 
@@ -107,6 +105,11 @@ body {
   padding: 6px 10px;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.08s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
 }
 
 .calculator {
@@ -129,11 +132,14 @@ body {
   font-size: 2rem;
   text-align: right;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
 
@@ -141,12 +147,12 @@ body {
   border: none;
   border-radius: 10px;
   padding: 14px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   background-color: var(--btn-bg);
   color: var(--btn-text);
   cursor: pointer;
-  transition: transform 0.08s ease, background-color 0.2s ease;
+  transition: transform 0.08s ease, background-color 0.2s ease, filter 0.2s ease;
 }
 
 .btn:hover {
@@ -170,19 +176,16 @@ body {
 .btn-equals {
   background-color: var(--equals-bg);
   color: var(--equals-text);
-  grid-row: span 2;
 }
 
 .btn-zero {
-  grid-column: span 2;
+  font-weight: 700;
 }
 
-/* Class used by JavaScript to briefly show a pressed button effect. */
 .btn.is-pressed {
   transform: scale(0.96);
   filter: brightness(0.95);
 }
-
 
 .history {
   margin-top: 12px;
@@ -214,6 +217,15 @@ body {
   padding: 4px 8px;
   font-size: 0.8rem;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.08s ease;
+}
+
+.clear-history:hover {
+  background: var(--btn-hover);
+}
+
+.clear-history:active {
+  transform: scale(0.98);
 }
 
 .history-list {
@@ -233,4 +245,19 @@ body {
   list-style: none;
   margin-left: -18px;
   color: var(--subtitle-color);
+}
+
+@media (max-width: 420px) {
+  .page {
+    width: min(96vw, 420px);
+  }
+
+  .btn {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .display {
+    font-size: 1.8rem;
+  }
 }
